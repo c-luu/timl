@@ -1,8 +1,10 @@
-FROM ubuntu:17.04
+FROM ubuntu:latest
 RUN apt-get update
 RUN apt-get install -y apt-utils
 RUN apt-get install -y python3-pip
 RUN apt-get install -y libzmq3-dev
+RUN apt-get install -y make
+RUN apt-get install -y time
 RUN pip3 install jupyter
 ENV PATH /root/.local/bin:$PATH
 
@@ -19,6 +21,7 @@ ADD . $TIML
 ENV PATH $PATH:$TIML
 ENV PYTHONPATH $PYTHONPATH:$TIML/jupyter
 
+RUN make mlton
 RUN mkdir -p /root/.local/share/jupyter/kernels/timl
 RUN ln -s $TIML/jupyter/timl-kernel.json /root/.local/share/jupyter/kernels/timl/kernel.json
 RUN jupyter kernelspec install ~/.local/share/jupyter/kernels/timl
